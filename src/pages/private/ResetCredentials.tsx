@@ -6,30 +6,32 @@ import { Form } from "@/components/ui/form";
 import { useAuth } from "@/context/AuthProvider";
 import { useTheme } from "@/context/ThemeProvider";
 import { useToast } from "@/context/ToastProvider";
+import { supabase } from "@/lib/supabaseClient";
 import { cn } from "@/lib/utils";
 import { DevTool } from "@hookform/devtools";
 import { zodResolver } from "@hookform/resolvers/zod";
 import { useMemo } from "react";
 import { useForm } from "react-hook-form";
 import { useIntl } from "react-intl";
-import { Link } from "react-router-dom";
 import { z } from "zod";
 
-function Registration() {
+function ResetCredentials() {
   const { formatMessage: t } = useIntl();
+  const { currentUser, logout, isLoggingOut } = useAuth();
   const { currentTheme } = useTheme();
-  const { register } = useAuth();
   const toast = useToast();
 
   const formSchema = useMemo(
     () =>
-      z.object({
-        email: z
-          .string()
-          .min(1, t({ id: "general.validation.required" }))
-          .email(t({ id: "general.validation.email" })),
-        password: z.string().min(1, t({ id: "general.validation.required" })),
-      }),
+      z
+        .object({
+          password: z.string().min(6, "Password must be at least 6 characters"),
+          confirmPassword: z.string(),
+        })
+        .refine((data) => data.password === data.confirmPassword, {
+          message: "Passwords must match",
+          path: ["confirmPassword"],
+        }),
     [],
   );
 
@@ -37,19 +39,26 @@ function Registration() {
     resolver: zodResolver(formSchema),
     mode: "onTouched",
     defaultValues: {
-      email: "",
       password: "",
+      confirmPassword: "",
     },
   });
 
-  const handleSubmit = async ({
-    email,
-    password,
-  }: z.infer<typeof formSchema>) => {
-    await register(email, password).catch((registerError) =>
-      toast.error({
-        title: "Registration failed",
-        description: extractErrorMessage(registerError),
+  const handleSubmit = async ({ password }: z.infer<typeof formSchema>) => {
+    if (!currentUser) return;
+
+    const { data, error } = await supabase.auth.updateUser({ password });
+
+    if (!data || error)
+      return toast.error({
+        title: "Failed to reset password",
+        description: extractErrorMessage(error || "No response data"),
+      });
+    logout(() =>
+      toast.success({
+        title: "Password reset",
+        description:
+          "Password has been reset, please login with the new password",
       }),
     );
   };
@@ -69,48 +78,42 @@ function Registration() {
             alt=""
           />
         </div>
-        <p className="mt-2 mb-2 text-center text-2xl">
-          {t({ id: "auth.register.title" })}
-        </p>
+        <p className="mt-2 mb-4 text-center text-2xl">Reset your password</p>
+
         <Form {...form}>
           <form className="mb-2" onSubmit={form.handleSubmit(handleSubmit)}>
             <CustomFormField
               required
+              type="password"
               control={form.control}
-              name="email"
-              label="Email"
-              type="email"
-              placeholder="Enter your email"
+              name="password"
+              label="New password"
+              placeholder="Enter your new password"
               fieldClassName="mb-3"
             />
             <CustomFormField
               required
-              control={form.control}
-              name="password"
-              label="Password"
               type="password"
-              placeholder="Enter your password"
+              control={form.control}
+              name="confirmPassword"
+              label="Confirm password"
+              placeholder="Confirm your new password"
+              fieldClassName="mb-3"
             />
 
             <CustomLoadingButton
               className="mt-4 w-full"
               isLoading={form.formState.isSubmitting}
-              disabled={!form.formState.isValid}
+              disabled={!form.formState.isValid || isLoggingOut}
             >
               {t({ id: "general.submit" })}
             </CustomLoadingButton>
           </form>
         </Form>
-        <div className="flex justify-center">
-          <Link to="/auth/login" className="text-primary hover:underline">
-            {t({ id: "auth.register.hint.signin" })}{" "}
-            {t({ id: "auth.register.link.signin" })}
-          </Link>
-        </div>
         {import.meta.env.DEV && <DevTool control={form.control} />}
       </div>
     </div>
   );
 }
 
-export default Registration;
+export default ResetCredentials;

@@ -1,12 +1,12 @@
 {
-  "auth.login.title": "CMS",
+  "auth.login.title": "Sign in",
   "auth.login.subtitle_1": "Today is a new day. It's your day. You shape it.",
   "auth.login.subtitle_2": "Sign in to start managing your projects",
   "auth.login.link.forgotPassword": "Forgot Password?",
   "auth.login.link.signup": "Sign up",
-  "auth.login.hint.signup": "Don't you have an account?",
+  "auth.login.hint.signup": "Do not have an account?",
   "auth.login.hint.rememberMe": "Remember me",
-  "auth.login.submit": "Login",
+  "auth.login.submit": "Sign in",
 
   "auth.register.title": "Sign up",
   "auth.register.subtitle_1": "Today is a new day. It's your day. You shape it.",
@@ -20,7 +20,7 @@
   "auth.register.link.signin": "Sign in",
   "auth.register.hint.signin": "Already have an account?",
 
-  "auth.forgotPassword.title": "Forget Your Password",
+  "auth.forgotPassword.title": "Forget Your Password?",
   "auth.forgotPassword.subtitle": "Type in your registered email address to reset password",
   "auth.forgotPassword.submit": "Submit",
   "auth.forgotpassword.confirmModal.title": "Please check your email",

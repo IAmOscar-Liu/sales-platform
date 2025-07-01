@@ -13,7 +13,7 @@ import { Link, useLocation, useNavigate } from "react-router-dom";
 import { PageHeaderLogoSection } from "./PageHeader";
 import { RequireAuth } from "./RequireAuth";
 import { useSidebarContext } from "./SidebarData";
-import FacilityInfo from "./FacilityInfo";
+import FacilityInfo from "../components/FacilityInfo";
 
 type SmallSidebarItemProps = {
   isActive?: boolean;
@@ -78,7 +78,7 @@ function Sidebar() {
           url="/salesman"
           acceptAuths={[]}
         />
-        <SmallSidebarItem
+        {/* <SmallSidebarItem
           Icon={LucideIcons.SchoolIcon}
           title={t({ id: "MENU.RESEARCH_MNG" })}
           url="/research"
@@ -121,7 +121,7 @@ function Sidebar() {
             url="/account/user"
             acceptAuths={[]}
           />
-        </SmallSidebarItem>
+        </SmallSidebarItem> */}
       </aside>
       {isSmallOpen && (
         <div
@@ -167,7 +167,7 @@ function Sidebar() {
           />
         </LargeSidebarSection>
         <hr />
-        <LargeSidebarSection
+        {/* <LargeSidebarSection
           title={t({ id: "MENU.RESEARCH_MNG" })}
           acceptAuths={[]}
         >
@@ -208,7 +208,7 @@ function Sidebar() {
             acceptAuths={[]}
           />
         </LargeSidebarSection>
-        <hr />
+        <hr /> */}
       </aside>
     </>
   );

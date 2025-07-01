@@ -2,7 +2,7 @@ import { Button } from "@/components/ui/button";
 import StudyEditDialog from "@/features/study/components/StudyEditDialog";
 import StudySearch from "@/features/study/components/StudySearch";
 import { mockStudies } from "@/features/study/mock";
-import { type PageLink, PageTitle } from "@/routes/layouts/PageData";
+import { PageLink, PageTitle } from "@/routes/layouts/PageData";
 import { PlusIcon } from "lucide-react";
 import { useMemo, useState } from "react";
 import { Link } from "react-router-dom";
@@ -22,7 +22,7 @@ function Study() {
         isActive: false,
       },
     ],
-    []
+    [],
   );
   const [isCreatingStudyDialogOpen, setIsCreatingStudyDialogOpen] =
     useState(false);
@@ -50,7 +50,7 @@ function Study() {
           {mockStudies.map(
             (
               { id, title, status, duration, team, description, patients },
-              studyIdx
+              studyIdx,
             ) => (
               <Link
                 to={`/research/study/${id}`}
@@ -70,7 +70,7 @@ function Study() {
                   <p>{patients}</p>
                 </div>
               </Link>
-            )
+            ),
           )}
         </div>
       </main>

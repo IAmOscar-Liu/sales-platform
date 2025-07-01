@@ -5,9 +5,9 @@ import { useTheme } from "@/context/ThemeProvider";
 import { cn } from "@/lib/utils";
 import { Menu, UserCircle2Icon } from "lucide-react";
 import { Link } from "react-router-dom";
-import DefaultTitle from "./DefaultTitle";
-import HeaderMenuSettings from "./HeaderMenuSettings";
-import { useSidebarContext } from "./SidebarData";
+import { useSidebarContext } from "../layouts/SidebarData";
+import DefaultTitle from "../components/DefaultTitle";
+import HeaderMenuSettings from "../components/HeaderMenuSettings";
 
 function PageHeader() {
   const { currentUser } = useAuth();

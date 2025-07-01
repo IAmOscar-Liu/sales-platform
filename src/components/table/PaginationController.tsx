@@ -29,6 +29,7 @@ function PaginationController({
     page = 1,
     pageSize = 10,
   } = paginationValue ?? {};
+  // console.log({ totalElements, totalPages, page, pageSize });
   const buttonPageGroups = useMemo(() => {
     const getResult = (): (number | string)[] => {
       const result = Array(totalPages)
@@ -40,7 +41,7 @@ function PaginationController({
         return result.map((r) => (r > 4 && r < totalPages ? "truncate" : r));
       if (totalPages - page <= 2)
         return result.map((r) =>
-          r > 1 && r < totalPages - 3 ? "truncate" : r
+          r > 1 && r < totalPages - 3 ? "truncate" : r,
         );
 
       return result.map((r) =>
@@ -48,7 +49,7 @@ function PaginationController({
           ? "left truncate"
           : r > page + 2 && r < totalPages
             ? "right truncate"
-            : r
+            : r,
       );
     };
 
@@ -63,7 +64,7 @@ function PaginationController({
     <div
       className={cn(
         "flex flex-wrap items-center justify-center gap-y-2",
-        className
+        className,
       )}
     >
       <p className="mb-0 flex items-center gap-1 text-sm">
@@ -84,7 +85,7 @@ function PaginationController({
           }}
         >
           {SEARCH_QUERY_PAGE_SIZE_SELECTIONS.filter(
-            (selection) => selection >= 10 && selection <= 100
+            (selection) => selection >= 10 && selection <= 100,
           ).map((selection) => (
             <option key={selection} value={selection}>
               {selection}

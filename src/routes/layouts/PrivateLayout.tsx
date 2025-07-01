@@ -5,10 +5,10 @@ import {
   PageScreenError,
   PageScreenLoading,
 } from "../../components/screen/PageScreen";
-import { PageDataProvider } from "./PageData";
-import PageHeader from "./PageHeader";
 import Sidebar from "./Sidebar";
 import { SidebarProvider } from "./SidebarData";
+import { PageDataProvider } from "./PageData";
+import PageHeader from "./PageHeader";
 
 function PrivateLayout() {
   //   const {

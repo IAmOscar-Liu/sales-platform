@@ -82,7 +82,7 @@ function Login() {
         &#169;2025 Symptomtrace Corp. All Rights Reserved.
       </p>
       <div className="mx-auto w-[476px]">
-        <div className="mb-3 w-[208px]">
+        <div className="mb-5 w-[208px]">
           <img
             className={cn("w-full object-contain object-left", {
               invert: currentTheme === "dark",
@@ -91,6 +91,9 @@ function Login() {
             alt=""
           />
         </div>
+        <p className="mt-2 mb-2 text-center text-2xl">
+          {t({ id: "auth.login.title" })}
+        </p>
         <Form {...form}>
           <form className="mb-2" onSubmit={form.handleSubmit(handleSubmit)}>
             <CustomFormField
@@ -136,10 +139,19 @@ function Login() {
               isLoading={form.formState.isSubmitting}
               disabled={!form.formState.isValid}
             >
-              {t({ id: "auth.login.submit" })}
+              {t({ id: "general.submit" })}
             </CustomLoadingButton>
           </form>
         </Form>
+        <div className="flex justify-center">
+          <Link
+            to="/auth/registration"
+            className="text-primary hover:underline"
+          >
+            {t({ id: "auth.login.hint.signup" })}{" "}
+            {t({ id: "auth.login.link.signup" })}
+          </Link>
+        </div>
         {import.meta.env.DEV && <DevTool control={form.control} />}
       </div>
     </div>

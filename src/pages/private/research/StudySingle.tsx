@@ -5,7 +5,7 @@ import Patients from "@/features/study/components/Patients";
 import StudyArm from "@/features/study/components/StudyArm";
 import { mockStudies } from "@/features/study/mock";
 import { cn } from "@/lib/utils";
-import { type PageLink, PageTitle } from "@/routes/layouts/PageData";
+import { PageLink, PageTitle } from "@/routes/layouts/PageData";
 import { ChevronLeftIcon, MoreVerticalIcon } from "lucide-react";
 import { useCallback, useMemo, useState } from "react";
 import { Navigate, useNavigate, useParams } from "react-router-dom";
@@ -23,7 +23,7 @@ const tabClassName = (active: boolean) =>
     "relative flex px-3 before:absolute before:top-full before:left-0 before:h-[2px] before:w-full before:content-[''] cursor-pointer font-light",
     {
       "before:bg-primary font-semibold pointer-events-none": active,
-    }
+    },
   );
 
 function StudySingle() {
@@ -47,7 +47,7 @@ function StudySingle() {
         isActive: false,
       },
     ],
-    []
+    [],
   );
   const { studyId } = useParams();
   const navigate = useNavigate();
@@ -61,14 +61,14 @@ function StudySingle() {
       Patients: <Patients />,
       Information: <Information />,
     }),
-    []
+    [],
   );
 
   const renderDetails = useCallback(
     (option: TabOption) => {
       return detailComponents[option] ?? null;
     },
-    [detailComponents]
+    [detailComponents],
   );
 
   if (!studyId) return <Navigate to="/research/study" replace />;

@@ -1,5 +1,6 @@
 import { supabase } from "@/lib/supabaseClient";
 import * as supabaseUtils from "@/lib/supabaseUtils";
+import { waitFor } from "@/lib/utils";
 import { type Tables } from "@/types/supabase";
 import { type Provider, type Session } from "@supabase/supabase-js";
 import {
@@ -12,13 +13,15 @@ import {
 
 type AuthContextType = {
   isLoading: boolean;
+  isLoggingOut: boolean;
   isAuthenticated: boolean;
   session: Session | null;
   currentUser: Tables<"users"> | null;
+  setCurrentUser: React.Dispatch<React.SetStateAction<Tables<"users"> | null>>;
   loginWithOauth(provider: Provider): Promise<void>;
   login(email: string, password: string): Promise<void>;
   register(email: string, password: string): Promise<void>;
-  logout(): Promise<void>;
+  logout(cb?: () => void): Promise<void>;
 };
 
 const AuthContext = createContext<AuthContextType | null>(null);
@@ -35,14 +38,14 @@ function AuthProvider({ children }: { children: ReactNode }) {
   const [session, setSession] = useState<Session | null>(null);
   const [currentUser, setCurrentUser] = useState<Tables<"users"> | null>(null);
   const [isLoading, setIsLoading] = useState(true);
+  const [isLoggingOut, setIsLoggingOut] = useState(false);
 
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange(
-      (_event, session) => {
-        console.log("onAuthStateChange");
-        // setIsLoading(false);
+      (event, session) => {
+        console.log(`onAuthStateChange - ${event}`);
         updateSessionUser(session);
-      }
+      },
     );
 
     return () => {
@@ -87,15 +90,39 @@ function AuthProvider({ children }: { children: ReactNode }) {
     if (error) throw new Error(error.message);
   }
 
-  async function logout() {
+  async function logout(cb?: () => void) {
+    setIsLoggingOut(true);
     const { error } = await supabase.auth.signOut();
-    if (error) throw new Error(error.message);
+    // const a = true;
+    // if (a) {
+    if (error) {
+      await handleLogOutFailure();
+      await waitFor(200); // force to clear user
+      window.location.reload();
+    }
+    setIsLoggingOut(false);
+    if (cb) setTimeout(() => cb(), 1000);
+  }
+
+  async function handleLogOutFailure() {
+    const { error: retryLogInError } = await supabase.auth.signInWithPassword({
+      email: import.meta.env.VITE_ADMIN_USER_EMAIL,
+      password: import.meta.env.VITE_ADMIN_USER_PASS,
+    });
+    if (retryLogInError) return false;
+    const { error: retryLogOutError } = await supabase.auth.signOut();
+
+    await waitFor(500);
+
+    if (retryLogOutError) return false;
+    return true;
   }
 
   return (
     <AuthContext.Provider
       value={{
         isLoading,
+        isLoggingOut,
         isAuthenticated: !!session,
         session,
         loginWithOauth,
@@ -103,6 +130,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
         register,
         logout,
         currentUser,
+        setCurrentUser,
       }}
     >
       {children}

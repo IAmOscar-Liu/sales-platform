@@ -233,26 +233,44 @@ export type Database = {
       }
       users: {
         Row: {
+          address: string | null
+          avatar_url: string | null
+          bio: string | null
+          birthday: string | null
           created_at: string | null
           email: string | null
           id: string
           name: string | null
+          phone: string | null
+          phone_code: string | null
           region: string | null
           role: string
         }
         Insert: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          birthday?: string | null
           created_at?: string | null
           email?: string | null
           id: string
           name?: string | null
+          phone?: string | null
+          phone_code?: string | null
           region?: string | null
           role?: string
         }
         Update: {
+          address?: string | null
+          avatar_url?: string | null
+          bio?: string | null
+          birthday?: string | null
           created_at?: string | null
           email?: string | null
           id?: string
           name?: string | null
+          phone?: string | null
+          phone_code?: string | null
           region?: string | null
           role?: string
         }

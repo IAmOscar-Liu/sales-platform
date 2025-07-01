@@ -20,3 +20,9 @@ export function formatDateTime(isoString: string) {
   const second = pad(date.getSeconds());
   return `${year}-${month}-${day} ${hour}:${minute}:${second}`;
 }
+
+export function getLocaleDate(date: Date) {
+  return date.toLocaleDateString("sv-SE", {
+    timeZone: Intl.DateTimeFormat().resolvedOptions().timeZone,
+  });
+}

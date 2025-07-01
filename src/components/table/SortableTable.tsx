@@ -96,7 +96,7 @@ function SortableTable<T>({
                       {
                         "rounded-e-md text-end":
                           cIdx === columns.length - 1 && lastColumnAlignEnd,
-                      }
+                      },
                     )}
                     onClick={() => sortKey && sortFn(sortKey)}
                   >
@@ -106,7 +106,7 @@ function SortableTable<T>({
                         {
                           "ms-auto":
                             cIdx === columns.length - 1 && lastColumnAlignEnd,
-                        }
+                        },
                       )}
                     >
                       {title}
@@ -122,13 +122,13 @@ function SortableTable<T>({
                   {columns.map(
                     (
                       { value, valueClick, className = "", disableClick },
-                      cIdx
+                      cIdx,
                     ) => (
                       <td
                         key={cIdx}
                         className={cn("px-2 py-3 text-sm", {
                           "text-end": cIdx === columns.length - 1,
-                          "hover:text-accent-foreground cursor-pointer font-semibold":
+                          "hover:text-muted-foreground cursor-pointer font-semibold":
                             (!disableClick || !disableClick(row, rIdx)) &&
                             !!value(row, rIdx) &&
                             !!valueClick,
@@ -143,7 +143,7 @@ function SortableTable<T>({
                       >
                         {value(row, rIdx)}
                       </td>
-                    )
+                    ),
                   )}
                 </tr>
               ))}

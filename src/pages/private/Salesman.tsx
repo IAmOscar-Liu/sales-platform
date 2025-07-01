@@ -3,14 +3,16 @@ import PaginationController from "@/components/table/PaginationController";
 import { SortableTable } from "@/components/table/SortableTable";
 import TableLayout from "@/components/table/TableLayout";
 import { QUERIES, TIME_IN_MILLISECONDS } from "@/constants";
+import SalesmanViewDialog from "@/features/salesman/components/SalesmanViewDialog";
 import useErrorToast from "@/hooks/useErrorToast";
 import { usePaginationData } from "@/hooks/usePaginationData";
 import { supabase } from "@/lib/supabaseClient";
 import { cn, formatDateTime } from "@/lib/utils";
 import { type PageLink, PageTitle } from "@/routes/layouts/PageData";
 import { type SearchQueries } from "@/types/response";
+import { Tables } from "@/types/supabase";
 import { useQuery } from "@tanstack/react-query";
-import { useMemo } from "react";
+import { useMemo, useState } from "react";
 
 function Salesman() {
   const breadcrumbs: Array<PageLink> = useMemo(
@@ -38,6 +40,20 @@ function Salesman() {
 function SalesmanTable({ className }: { className?: string }) {
   const [queryValue, updateQueryValue] = usePaginationData();
   const { data: salesmanData, isFetching, isLoading } = useSalesman(queryValue);
+  const [selectedSalesmanId, setSelectedSalesmanId] = useState<
+    string | undefined
+  >();
+  const selectedSalesman = useMemo(() => {
+    if (!salesmanData || !selectedSalesmanId) return undefined;
+    return salesmanData.data.find((d) => d.id === selectedSalesmanId);
+  }, [selectedSalesmanId]);
+  const [isSalesmanViewDialogOpen, setIsSalesmanViewDialogOpen] =
+    useState(false);
+
+  const handleValueClick = (value: Tables<"users">) => {
+    setSelectedSalesmanId(value.id);
+    setIsSalesmanViewDialogOpen(true);
+  };
 
   return (
     <div className={cn("p-2", className)}>
@@ -52,6 +68,11 @@ function SalesmanTable({ className }: { className?: string }) {
             <SimpleSearch
               updateQueryValue={updateQueryValue}
               placeholder="search salesman..."
+            />
+            <SalesmanViewDialog
+              open={isSalesmanViewDialogOpen}
+              setOpen={setIsSalesmanViewDialogOpen}
+              data={selectedSalesman}
             />
           </div>
         </div>
@@ -74,23 +95,28 @@ function SalesmanTable({ className }: { className?: string }) {
                       title: "Name",
                       value: (d) => d.name || "",
                       sortKey: "name",
+                      valueClick: handleValueClick,
                     },
                     {
                       title: "Email",
                       value: (d) => d.email || "",
+                      valueClick: handleValueClick,
                     },
                     {
                       title: "Region",
                       value: (d) => d.region || "",
+                      valueClick: handleValueClick,
                     },
                     {
                       title: "Role",
                       value: (d) => d.role,
+                      valueClick: handleValueClick,
                     },
                     {
                       title: "Created at",
                       value: (d) =>
                         d.created_at ? formatDateTime(d.created_at) : "",
+                      valueClick: handleValueClick,
                     },
                   ]}
                 />
@@ -102,6 +128,7 @@ function SalesmanTable({ className }: { className?: string }) {
               paginationValue={{
                 ...queryValue,
                 totalElements: salesmanData?.totalElements,
+                totalPages: salesmanData?.totalPages,
               }}
               updateQueryValue={updateQueryValue}
             />

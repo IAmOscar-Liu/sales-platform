@@ -1,6 +1,6 @@
 import { cn } from "@/lib/utils";
 import { Link } from "react-router-dom";
-import { usePageData } from "./PageData";
+import { usePageData } from "../layouts/PageData";
 
 function DefaultTitle({ className = "" }: { className?: string }) {
   const { pageTitle, pageBreadcrumbs } = usePageData();
