@@ -99,7 +99,7 @@ function CustomFormField<T extends FieldValues>(
             placeholder={props.placeholder}
             min={props.min}
             max={props.max}
-            step={props.step}
+            step={props.step === undefined ? "any" : props.step}
             onChange={(e) => {
               const value = e.target.value;
               field.onChange(value === "" ? "" : Number(value));

@@ -4,7 +4,7 @@
   "auth.login.subtitle_2": "Sign in to start managing your projects",
   "auth.login.link.forgotPassword": "Forgot Password?",
   "auth.login.link.signup": "Sign up",
-  "auth.login.hint.signup": "Don not have an account?",
+  "auth.login.hint.signup": "Do not have an account?",
   "auth.login.hint.rememberMe": "Remember me",
   "auth.login.submit": "Sign in",
 

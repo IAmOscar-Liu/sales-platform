@@ -43,7 +43,7 @@ function AuthProvider({ children }: { children: ReactNode }) {
   useEffect(() => {
     const { data: listener } = supabase.auth.onAuthStateChange(
       (event, session) => {
-        console.log(`onAuthStateChange - ${event}`);
+        console.log(`onAuthStateChange - ${event}, session - ${!!session}`);
         updateSessionUser(session);
       },
     );
@@ -96,15 +96,20 @@ function AuthProvider({ children }: { children: ReactNode }) {
     // const a = true;
     // if (a) {
     if (error) {
-      await handleLogOutFailure();
+      await _handleLogOutFailure();
       await waitFor(200); // force to clear user
       window.location.reload();
     }
     setIsLoggingOut(false);
     if (cb) setTimeout(() => cb(), 1000);
+
+    // ensure logout successfully
+    await waitFor(500);
+    setSession(null);
+    setCurrentUser(null);
   }
 
-  async function handleLogOutFailure() {
+  async function _handleLogOutFailure() {
     const { error: retryLogInError } = await supabase.auth.signInWithPassword({
       email: import.meta.env.VITE_ADMIN_USER_EMAIL,
       password: import.meta.env.VITE_ADMIN_USER_PASS,
